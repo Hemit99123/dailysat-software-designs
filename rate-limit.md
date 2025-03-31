@@ -9,7 +9,7 @@ graph TD
   B -- Found --> F[Retrieve current hit count] --> G[Convert to number] --> H{Check rate limit}
 
   H -- Not exceeded --> I[Increment hit count] --> J[Update Redis KEEPTTL] --> K[Allow request]
-  H -- Exceeded --> L[Store user data in Redis] --> M[Deny request with rate limit message]
+  H -- Exceeded --> L[Store user data in Redis] --> M[Showcase the cached data and warn user ablut outdated data]
 
   E --> N[End]
   K --> N
