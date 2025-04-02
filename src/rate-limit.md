@@ -12,7 +12,8 @@ flowchart
     CheckTokenAvailability -- Yes --> ConsumeToken["Delete one Token"]
     ConsumeToken --> ProcessRequest["Process Request"]
     ProcessRequest --> CheckRefill{"Check Timestamp with Current Timestamp. Is it Time to Refill Tokens?"}
-    RejectRequest --> CheckRefill
+    RejectRequest --> CachedData["Use cached data to fill user info (outdated)"]
+    CachedData --> CheckRefill
     CheckRefill -- Yes --> RefillTokens["Refill Tokens at Current Rate"]
     CheckRefill -- No --> ContinueWithCurrentTokens["Continue with Current Token Count"]
 
