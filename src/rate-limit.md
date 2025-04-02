@@ -7,16 +7,14 @@ The current algorithm that is employed is the Token Bucket algorithm, look at di
 ```mermaid
 flowchart 
     Start["Start"] --> ReceiveRequest["Receive Request from Middleware"]
-    ReceiveRequest --> CheckTokenAvailability{"Is There Tokens Left?"}
+    ReceiveRequest --> CheckTokenAvailability{"Does Token Exist in Redis?"}
     CheckTokenAvailability -- No --> RejectRequest["Reject Request"]
-    CheckTokenAvailability -- Yes --> ConsumeToken["Delete one Token"]
+    CheckTokenAvailability -- Yes --> ConsumeToken["Decrement Token Count"]
     ConsumeToken --> ProcessRequest["Process Request"]
-    ProcessRequest --> CheckRefill{"Check Timestamp with Current Timestamp. Is it Time to Refill Tokens?"}
+    ProcessRequest --> End["End"]
     RejectRequest --> CachedData["Use cached data to fill user info (outdated)"]
-    CachedData --> CheckRefill
-    CheckRefill -- Yes --> RefillTokens["Refill Tokens at Current Rate"]
-    CheckRefill -- No --> ContinueWithCurrentTokens["Continue with Current Token Count"]
-
-    RefillTokens --> End["End"]
-    ContinueWithCurrentTokens --> End
+    CachedData --> End
+    subgraph Redis["Redis Auto-Expiration"]
+        SetToken["Token Stored with TTL"] --> AutoDelete["Redis Auto-Deletes Token after TTL"]
+    end
 ```
