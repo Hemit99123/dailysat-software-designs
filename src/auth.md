@@ -2,6 +2,10 @@
 
 The authentication will be handled through a **session-based authentication service**. Specifically, we will be employing the better-auth library to abstract most of the logic required to build the authentication.
 
+
+### Link to Better Auth docs:
+https://www.better-auth.com/docs/concepts/session-management
+
 ```mermaid
 graph TD;
     A[User Requests Login] -->|Redirect to Google SSO| B[Google Authentication]
